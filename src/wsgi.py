@@ -80,11 +80,11 @@ def index():
 
 # # os.system('mongod --bind_ip_all &')
 
-# #collection, client, db = connect_to_database()
-# collection, client, db = connect_to_docker_database()
+# collection, client, db = connect_to_database()
+collection, client, db = connect_to_docker_database()
 
-# all_database_fields = get_database_fields(collection)
-
+all_database_fields = get_database_fields(collection)
+print('all_database_fields',all_database_fields)
 
 # # meta_data_fields = get_database_fields(collection, ignore_fields=['Time [sec]', 'Stroke', 'Extens', 'Load', 'Temp1', 'Temp2', 'Temp3'])
 # # print(meta_data_fields)

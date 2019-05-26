@@ -4,7 +4,7 @@ FROM nginx
 # build with 
 # sudo docker build -t shimwell/nginx .
 # run with
-# sudo docker run -p 8080:8080 -u 143 shimwell/nginx
+# sudo docker run -p 8080:8080 --network host -u 143 shimwell/nginx
 # navigate to http://127.0.0.1:8080/
 
 ENV HOME=/opt/repo
@@ -18,6 +18,7 @@ RUN pip3 install pymongo
 
 
 # Source code file
+RUN echo 'copying updated src'
 COPY src ${HOME}/src
 RUN echo 'copying updated src'
 

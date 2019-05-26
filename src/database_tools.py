@@ -15,7 +15,7 @@ def connect_to_database(db_name='my_database',collection_name='collection_one'):
     client = MongoClient('localhost', 27017)
     db = client[db_name]
     collection = db[collection_name]
-    print('connected to database')
+    print('connected to regular database')
     return collection, client, db
 
 def connect_to_docker_database(db_name='my_database',collection_name='collection_one'):
@@ -25,7 +25,7 @@ def connect_to_docker_database(db_name='my_database',collection_name='collection
     client = MongoClient(host, 27017)
     db = client[db_name]
     collection = db[collection_name]
-    print('connected to database')
+    print('connected to docker database')
     return collection, client, db    
 
 def delete_database(client, db_name='my_database'):
