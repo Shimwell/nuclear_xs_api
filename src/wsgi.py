@@ -16,43 +16,6 @@ VERSION = '0.1'
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-# dummy API
-@app.route('/api/v{}/theanswer'.format(VERSION), methods=['GET'])
-def theanswer():
-    return jsonify({ 'answer': 42 })
-
-# add API
-@app.route('/api/v{}/add'.format(VERSION), methods=['POST'])
-def add():
-    if not request.json or not 'data' in request.json:
-        abort(400)
-
-    jsonraw = request.json
-    result = -1.0
-    if 'data' in jsonraw and len(jsonraw['data']) > 0:
-        result = sum(jsonraw['data'])
-
-    return jsonify({ 'result': result })
-
-# silly work API
-@app.route('/api/v{}/dowork'.format(VERSION), methods=['POST'])
-def dowork():
-    if not request.json or not 'data' in request.json:
-        abort(400)
-
-    jsonraw = request.json
-    result = -1.0
-    if 'data' in jsonraw and len(jsonraw['data']) > 0:
-        result = 2.4
-        for d in jsonraw['data']:
-            result += math.pow(float(d)*4.51e2/5.123e2, 2.3)
-
-    time.sleep(3)
-    return jsonify({ 'result': result })
-
-@app.route('/')
-def index():
-    return "Test rest API v{0}".format(VERSION)
 
 
 
@@ -89,23 +52,24 @@ print('all_database_fields',all_database_fields)
 # # meta_data_fields = get_database_fields(collection, ignore_fields=['Time [sec]', 'Stroke', 'Extens', 'Load', 'Temp1', 'Temp2', 'Temp3'])
 # # print(meta_data_fields)
 
-# meta_data_fields = find_all_fields_not_of_a_particular_types_in_database(collection,'list')
-# print('meta_data_fields',meta_data_fields)
+meta_data_fields = find_all_fields_not_of_a_particular_types_in_database(collection,'list')
+print('meta_data_fields',meta_data_fields)
 
-# axis_option_fields = find_all_fields_of_a_particular_types_in_database(collection,'list')
-# print('axis_option_fields',axis_option_fields)
+axis_option_fields = find_all_fields_of_a_particular_types_in_database(collection,'list')
+print('axis_option_fields',axis_option_fields)
 
-# # metadata_values=[]
-# metadata_fields_and_their_distinct_values={}
-# for entry in meta_data_fields:
-#     values = get_entries_in_field(collection,entry)
-#     # metadata_values.append(values)
-#     metadata_fields_and_their_distinct_values[entry]=values
+# metadata_values=[]
+metadata_fields_and_their_distinct_values={}
+for entry in meta_data_fields:
+    values = get_entries_in_field(collection,entry)
+    # metadata_values.append(values)
+    values.sort()
+    metadata_fields_and_their_distinct_values[entry]=values
 
 
-# meta_data_fields_and_distinct_entries = []
-# for field in meta_data_fields:
-#     meta_data_fields_and_distinct_entries.append({'field':[field],'distinct_values':metadata_fields_and_their_distinct_values[field]})
+meta_data_fields_and_distinct_entries = []
+for field in meta_data_fields:
+    meta_data_fields_and_distinct_entries.append({'field':[field],'distinct_values':metadata_fields_and_their_distinct_values[field]})
 
 # #print(meta_data_fields_and_distinct_entries)
 # #print(find_metadata_fields_and_their_distinct_values(collection, ignore_fields=['Time [sec]', 'Stroke', 'Extens', 'Load', 'Temp1', 'Temp2', 'Temp3']))
@@ -208,10 +172,10 @@ print('all_database_fields',all_database_fields)
 #     return jsonify(axis_option_fields)
 
 
-# @app.route('/find_meta_data_fields_and_distinct_entries' ,methods=['GET','POST'])
+@app.route('/find_meta_data_fields_and_distinct_entries' ,methods=['GET','POST'])
 # @cross_origin()
-# def find_meta_data_fields_and_distinct_entries():
-#     return jsonify(meta_data_fields_and_distinct_entries)
+def find_meta_data_fields_and_distinct_entries():
+    return jsonify(meta_data_fields_and_distinct_entries)
 
 
 

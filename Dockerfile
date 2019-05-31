@@ -18,7 +18,7 @@ RUN pip3 install pymongo
 
 
 # Source code file
-RUN echo 'copying updated src'
+RUN echo 'copying updated srsc'
 COPY src ${HOME}/src
 RUN echo 'copying updated src'
 
