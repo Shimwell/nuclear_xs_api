@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y supervisor uwsgi python3 python3-pip pr
     /usr/bin/pip3 install uwsgi==2.0.17 flask==1.0.2
 
 RUN pip3 install pymongo 
+RUN pip3 install Flask-Cors
 
 
 

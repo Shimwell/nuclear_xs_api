@@ -7,8 +7,10 @@ from bson import json_util
 from bson.objectid import ObjectId
 from data_formatting_tools import *
 from database_tools import *
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
 
 VERSION = '0.1'
 
@@ -36,7 +38,6 @@ def not_found(error):
 # import re
 # from flask import Flask
 # from flask import Flask, jsonify, render_template, request, Response
-# from flask_cors import CORS, cross_origin
 # import os
 # from io import BytesIO
 # from io import StringIO
@@ -84,7 +85,6 @@ for field in meta_data_fields:
 # print('static_dir',static_dir)
 # app = Flask(__name__, template_folder=template_dir, static_folder=static_dir )
 
-# CORS(app)
 
 
 # def convert_query_string_to_query_dict(query_string):
@@ -161,19 +161,19 @@ for field in meta_data_fields:
 
 
 
-# @app.route('/find_meta_data_fields' ,methods=['GET','POST'])
-# @cross_origin()
-# def find_meta_data_fields():
-#     return jsonify(meta_data_fields)
+@app.route('/find_meta_data_fields' ,methods=['GET','POST'])
+@cross_origin()
+def find_meta_data_fields():
+    return jsonify(meta_data_fields)
 
-# @app.route('/find_axis_data_fields' ,methods=['GET','POST'])
-# @cross_origin()
-# def find_axis_data_fields():
-#     return jsonify(axis_option_fields)
+@app.route('/find_axis_data_fields' ,methods=['GET','POST'])
+@cross_origin()
+def find_axis_data_fields():
+    return jsonify(axis_option_fields)
 
 
 @app.route('/find_meta_data_fields_and_distinct_entries' ,methods=['GET','POST'])
-# @cross_origin()
+@cross_origin()
 def find_meta_data_fields_and_distinct_entries():
     return jsonify(meta_data_fields_and_distinct_entries)
 
@@ -274,10 +274,10 @@ def find_meta_data_fields_and_distinct_entries():
 
 
 
-# @app.route('/test' ,methods=['GET','POST'])
-# @cross_origin()
-# def return_test():
-#     return 'test working'
+@app.route('/test' ,methods=['GET','POST'])
+@cross_origin()
+def return_test():
+    return 'test working'
 
 # if __name__ == "__main__":
 #     app.run(host='0.0.0.0', port=5001)
