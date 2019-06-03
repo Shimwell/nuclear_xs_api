@@ -19,9 +19,9 @@ RUN pip3 install Flask-Cors
 
 
 # Source code file
-RUN echo 'copying updated src'
-COPY src ${HOME}/src
 RUN echo 'copying updated srsc'
+COPY src ${HOME}/src
+RUN echo 'copying updated src'
 
 # Copy the configuration file from the current directory and paste 
 # it inside the container to use it as Nginx's default config.

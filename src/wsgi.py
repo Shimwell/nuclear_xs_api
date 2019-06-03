@@ -87,15 +87,15 @@ for field in meta_data_fields:
 
 
 
-def convert_query_string_to_query_dict(query_string):
-    try:
-        query ={}
-        for x in query_string.strip('{}').split(','):
-            entry=x.split(':')
-            query[entry[0]]=entry[1]
-    except:
-        query={}
-    return query
+# def convert_query_string_to_query_dict(query_string):
+#     try:
+#         query ={}
+#         for x in query_string.strip('{}').split(','):
+#             entry=x.split(':')
+#             query[entry[0]]=entry[1]
+#     except:
+#         query={}
+#     return query
 
 
 def get_entries_in_field(collection, field, query=None):
@@ -153,7 +153,9 @@ def find_distinct_entries_in_a_field():
     field = request.args.get('field')
     query_string = request.args.get('query')
 
-    query = convert_query_string_to_query_dict(query_string)
+    # query = convert_query_string_to_query_dict(query_string)
+    query = json.loads(query_string)
+
 
     result = get_entries_in_field(collection, field, query)
 
@@ -185,7 +187,8 @@ def find_meta_data_fields_and_distinct_entries():
 def get_number_of_matching_entrys():
     query_string = request.args.get('query')
 
-    query = convert_query_string_to_query_dict(query_string)
+    # query = convert_query_string_to_query_dict(query_string)
+    query = json.loads(query_string)
 
     results = collection.find(query)
     counter=0
@@ -209,6 +212,12 @@ def get_matching_entrys():
     #         query[entry[0]]=entry[1]
     # except:
     #     query={}
+    query = json.loads(query_string)
+    if list(query.keys())[0] == "id":
+
+        query = {"_id": ObjectId(list(query.values())[0])}
+
+
     query = json.loads(query_string)
     print('query = ',query)
     result = collection.find(query).limit(limit)
@@ -250,9 +259,16 @@ def get_matching_entrys_limited_fields():
     print('fields = ',fields)
     print('query = ',query)
 
-    result = collection.find(query,fields).limit(limit)
-    results_json = json_util.dumps(result)
-    return results_json
+    results = collection.find(query,fields).limit(limit)
+    
+    results_str = json_util.dumps(results)
+    results_json = json.loads(results_str)
+
+    for res in results_json: 
+        res['id']=res['_id']['$oid'] 
+        res.pop('_id')
+    results_str = json_util.dumps(results_json)
+    return results_str
 
 
 @app.route('/get_matching_entry' ,methods=['GET','POST'])
@@ -261,56 +277,41 @@ def get_matching_entry():
     query_string = request.args.get('query')
 
     print('query_string',query_string)
-    try:
-        query ={}
-        query_string= query_string.replace('"', '').replace("'", '')
-        for x in query_string.strip('{}').split(','):
-            entry=x.split(':')
-            query[entry[0]]=entry[1]
-    except:
-        query={}
+    # try:
+    #     query ={}
+    #     query_string= query_string.replace('"', '').replace("'", '')
+    #     for x in query_string.strip('{}').split(','):
+    #         entry=x.split(':')
+    #         query[entry[0]]=entry[1]
+    # except:
+    #     query={}
+    query = json.loads(query_string)
+    if list(query.keys())[0] == "id":
+
+        query = {"_id": ObjectId(list(query.values())[0])}
+
     print('query = ',query)
-    result = collection.find_one(query)
-    results_json = json_util.dumps(result)
-    return results_json
+    results = collection.find_one(query)
+
+    
+    results_str = json_util.dumps(results)
+    results_json = json.loads(results_str)
+
+    for res in [results_json]: 
+        res['id']=res['_id']['$oid'] 
+        res.pop('_id')
+    results_str = json_util.dumps(results_json)
+    return results_str
 
 
-
-@app.route('/test' ,methods=['GET','POST'])
-@cross_origin()
-def return_test():
-    return 'test working'
 
 # if __name__ == "__main__":
 #     app.run(host='0.0.0.0', port=5001)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     app.run(
-        debug=False,
+        debug=True,
         host='0.0.0.0',
         port=8080
     )
