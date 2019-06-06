@@ -10,8 +10,11 @@ FROM nginx
 ENV HOME=/opt/repo
 
 # install python, uwsgi, and supervisord
-RUN apt-get update && apt-get install -y supervisor uwsgi python3 python3-pip procps vim && \
-    /usr/bin/pip3 install uwsgi==2.0.17 flask==1.0.2
+RUN apt-get update && apt-get install -y supervisor uwsgi python3 python3-pip procps vim
+    
+RUN pip3 install uwsgi
+    
+RUN pip3 install flask
 
 RUN pip3 install pymongo 
 RUN pip3 install Flask-Cors
@@ -20,8 +23,8 @@ RUN pip3 install Flask-Cors
 
 # Source code file
 RUN echo 'copying updated srsc'
-COPY src ${HOME}/src
 RUN echo 'copying updated src'
+COPY src ${HOME}/src
 
 # Copy the configuration file from the current directory and paste 
 # it inside the container to use it as Nginx's default config.
